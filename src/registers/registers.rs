@@ -3,12 +3,12 @@ use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Register {
-    register: String,
-    name: String,
-    value: String,
+    pub register: String,
+    pub name: String,
+    pub value: String,
 }
 
-pub fn init() -> HashMap<String, Register> {
+pub fn init() -> HashMap<String, Option<Register>> {
 
     let mut registers: Vec<(String, Register)> = Vec::new();
     
@@ -199,10 +199,10 @@ pub fn init() -> HashMap<String, Register> {
         value: String::from("0")
     }));
 
-    let mut hashmap: HashMap<String, Register> = HashMap::new();
+    let mut hashmap: HashMap<String, Option<Register>> = HashMap::new();
 
     for i in registers {
-        hashmap.insert(i.0, i.1);
+        hashmap.insert(i.0, Some(i.1));
     }
 
     return hashmap;
