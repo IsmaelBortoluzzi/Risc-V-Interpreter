@@ -8,7 +8,19 @@ pub struct Register {
     pub value: String,
 }
 
-pub fn init() -> HashMap<String, Option<Register>> {
+impl Register {
+    pub fn clone(&self) -> Register {
+        Register { register: String::from(&self.register), name: String::from(&self.name), value: String::from(&self.value) }
+    }
+
+    pub fn copy_attrs(&mut self, reg: &Register) {
+        self.register = String::from(&reg.register);
+        self.name = String::from(&reg.name);
+        self.value = String::from(&reg.value);
+    }
+}
+
+pub fn init() -> HashMap<String, Register> {
 
     let mut registers: Vec<(String, Register)> = Vec::new();
     
@@ -199,10 +211,10 @@ pub fn init() -> HashMap<String, Option<Register>> {
         value: String::from("0")
     }));
 
-    let mut hashmap: HashMap<String, Option<Register>> = HashMap::new();
+    let mut hashmap: HashMap<String, Register> = HashMap::new();
 
     for i in registers {
-        hashmap.insert(i.0, Some(i.1));
+        hashmap.insert(i.0, i.1);
     }
 
     return hashmap;

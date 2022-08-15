@@ -6,7 +6,7 @@ use super::R_type::RType;
 //     value: String,
 // }
 pub fn exec_add(instr: &mut RType) {
-    let sum: i32 = *(&instr.reg_2.value.parse::<i32>().unwrap()) + *(&instr.reg_3.value.parse::<i32>().unwrap());
+    let sum: i32 = &instr.reg_2.value.parse::<i32>().unwrap() + &instr.reg_3.value.parse::<i32>().unwrap();
     instr.reg_1.value = sum.to_string();
 }
 
@@ -33,3 +33,27 @@ pub fn exec_rem(instr: &mut RType) {
     let remainder: i32 = &instr.reg_2.value.parse::<i32>().unwrap() % &instr.reg_3.value.parse::<i32>().unwrap();
     instr.reg_1.value = remainder.to_string();
 }
+
+pub fn exec_sll(instr: &mut RType) {
+    let result: i32 = *(&instr.reg_2.value.parse::<i32>().unwrap()) << *(&instr.reg_3.value.parse::<i32>().unwrap());
+    instr.reg_1.value = result.to_string();
+}
+
+
+pub fn exec_xor(instr: &mut RType) {
+    let result: i32 = *(&instr.reg_2.value.parse::<i32>().unwrap()) ^ *(&instr.reg_3.value.parse::<i32>().unwrap());
+    instr.reg_1.value = result.to_string();
+}
+
+
+pub fn exec_or(instr: &mut RType) {
+    let result: i32 = &instr.reg_2.value.parse::<i32>().unwrap() | &instr.reg_3.value.parse::<i32>().unwrap();
+    instr.reg_1.value = result.to_string();
+}
+
+
+pub fn exec_and(instr: &mut RType) {
+    let result: i32 = &instr.reg_2.value.parse::<i32>().unwrap() & &instr.reg_3.value.parse::<i32>().unwrap();
+    instr.reg_1.value = result.to_string();
+}
+

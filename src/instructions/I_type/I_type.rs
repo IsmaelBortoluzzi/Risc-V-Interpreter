@@ -1,9 +1,7 @@
 use {
     crate::registers::registers::Register,
     crate::instructions::instructions::InstructionName,
-    super::utils::{ 
-
-    },
+    super::utils::*,
 };
 
 
@@ -16,14 +14,14 @@ pub struct IType {
     pub imm: i32,
 }
 
-impl RType {
+impl IType {
     pub fn exec(&mut self) {
         match &self.name {
-            InstructionName::Add => exec_addi(self),
-            InstructionName::Sub => exec_andi(self),
-            InstructionName::Mul => exec_xori(self),
-            InstructionName::Div => exec_ori(self),
-            InstructionName::Rem => exec_slli(self),
+            InstructionName::Addi => exec_addi(self),
+            InstructionName::Slli => exec_slli(self),
+            InstructionName::Xori => exec_xori(self),
+            InstructionName::Ori => exec_ori(self),
+            InstructionName::Andi => exec_andi(self),
             _ => {}
         }
     }

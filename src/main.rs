@@ -1,5 +1,7 @@
 use std::env;
 
+use run::run::get_all_labels;
+
 mod file_reader;
 mod registers;
 mod dot_data;
@@ -25,15 +27,17 @@ fn main() {
     let mut lines: Vec<String> = reader();
     
     // registers
-    let mut registers: HashMap<String, Option<Register>> = init();
+    let mut registers: HashMap<String, Register> = init();
 
     // store data defined in .data
     let mut data: HashMap<String, DotDataVariable> = store_dot_data(&mut lines);
 
+    let labels = get_all_labels(&mut lines);
+
     // execute program line by line
     run(&mut data, &mut registers, &mut lines);
 
-    for x in data.iter() {
+    for x in labels.iter() {
         println!("{}: {:?}", *(x.0), *(x.1));
     }
 }
