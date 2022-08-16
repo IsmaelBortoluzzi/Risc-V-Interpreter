@@ -124,17 +124,17 @@ pub fn exec_r_type(instruction: &Vec<&str>, registers: &mut HashMap<String, Regi
 
     let reg_2: Register;
     {
-        let reg_2_aux: &mut Register = registers.entry(instruction[1].to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
+        let reg_2_aux: &mut Register = registers.entry(instruction[1].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
         reg_2 = reg_2_aux.clone();
     }
 
     let reg_3: Register;
     {
-        let reg_3_aux: &mut Register = registers.entry(instruction[2].to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
+        let reg_3_aux: &mut Register = registers.entry(instruction[2].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
         reg_3 = reg_3_aux.clone();
     }    
 
-    let reg_1: &mut Register = registers.entry(instr_reg_1[1].to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
+    let reg_1: &mut Register = registers.entry(instr_reg_1[1].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
 
 
     let mut r_type_instr: RType = RType {
@@ -155,13 +155,13 @@ pub fn exec_i_type(instruction: &Vec<&str>, registers: &mut HashMap<String, Regi
     let instr_reg_1: Vec<&str> = instruction[0].split(" ").collect();
     let instr: InstructionName = InstructionName::str_to_instr_name(instr_reg_1[0]);
     
-    let imm: i32 = instruction[2].parse().unwrap();
+    let imm: i32 = instruction[2].trim().parse().unwrap();
     let reg_2: Register;
     {
-        let reg_2_aux: &mut Register = registers.entry(instruction[1].to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
+        let reg_2_aux: &mut Register = registers.entry(instruction[1].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
         reg_2 = reg_2_aux.clone();
     }
-    let reg_1: &mut Register = registers.entry(instr_reg_1[1].to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
+    let reg_1: &mut Register = registers.entry(instr_reg_1[1].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
 
 
     let mut r_type_instr: IType = IType {

@@ -1,22 +1,27 @@
-use std::env;
-
-use run::run::get_all_labels;
-
 mod file_reader;
 mod registers;
 mod dot_data;
 mod run;
 mod instructions;
 
-
 use {
-    registers::registers::{init, Register},
-    file_reader::reader::reader,
+    registers::registers::{
+        init, 
+        Register
+    },
+    file_reader::reader::{
+        reader,
+        normalize_dotmain,
+    },
     std::{
         collections::HashMap,
+        env,
     },
     dot_data::data::{DotDataVariable, store_dot_data},
-    run::run::run,
+    run::run::{
+        run,
+        get_all_labels,
+    },
 };
 
 
@@ -25,6 +30,7 @@ fn main() {
 
     // lines of the file
     let mut lines: Vec<String> = reader();
+    normalize_dotmain(&mut lines);
     
     // registers
     let mut registers: HashMap<String, Register> = init();

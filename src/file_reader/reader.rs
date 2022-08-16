@@ -5,6 +5,7 @@ use {
         path::Path,
         env,
     },
+    crate::run::run::get_start,
 };
 
 
@@ -14,11 +15,20 @@ fn lines_from_file(filename: impl AsRef<Path>) -> io::Result<Vec<String>> {
 
 
 pub fn reader() -> Vec<String> {
-    let args: Vec<String> = env::args().collect();
-    let filename: String = String::from(args[1].as_str());
-    
+    // let args: Vec<String> = env::args().collect();
+    // let filename: String = String::from(args[1].as_str());
+    let filename: String = "/home/ballke/VScodeProjects/rust/Risc-V-Interpreter/dummyfile.txt".to_string();
     let lines: Vec<String> = lines_from_file(filename).expect("Could not load lines");
     
     return lines;
 
+}
+
+
+pub fn normalize_dotmain(lines: &mut Vec<String>) {
+    let mut line: usize = get_start(lines);
+    while line < lines.len() {
+        lines[line] = lines[line].replace(", ", ",");
+        line += 1;
+    }
 }

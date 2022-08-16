@@ -8,7 +8,7 @@ use {
 };
 
 
-fn get_start(lines: &mut Vec<String>) -> usize {
+pub fn get_start(lines: &mut Vec<String>) -> usize {
     let mut line: usize = 0;
     while line < lines.len() {
         if lines[line] == ".main:" {
