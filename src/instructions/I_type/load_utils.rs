@@ -13,7 +13,7 @@ pub fn get_read_reg_value(key: &str, registers: &mut HashMap<String, Register>) 
                 _ => { panic!("Addresses are always decimal numbers!!"); }
             }
         },
-        None => { panic!("Unkown Register!"); }
+        None => { panic!("Unknown Register!"); }
     }
 }
 

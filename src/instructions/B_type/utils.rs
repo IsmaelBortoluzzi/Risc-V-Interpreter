@@ -1,19 +1,27 @@
-// use super::B_type::BType;
+use super::B_type::BType;
 
 
-// pub fn exec_blt(instr: &mut IType) {
+pub fn exec_blt(instr: &mut BType) -> bool {
+    let reg_1_value = instr.reg_1.value.parse::<i32>().unwrap();
+    let reg_2_value = instr.reg_1.value.parse::<i32>().unwrap();
 
-// }
-
-
-// pub fn exec_beq(instr: &mut IType) {
-    
-// }
+    return reg_1_value < reg_2_value;
+}
 
 
-// pub fn exec_bgt(instr: &mut IType) {
-//     let result: i32 = *(&instr.reg_2.value.parse::<i32>().unwrap()) ^ &instr.imm;
-//     instr.reg_1.value = result.to_string();
-//}
+pub fn exec_beq(instr: &mut BType) -> bool {
+    let reg_1_value = instr.reg_1.value.parse::<i32>().unwrap();
+    let reg_2_value = instr.reg_1.value.parse::<i32>().unwrap();
+
+    return reg_1_value == reg_2_value;
+}
+
+
+pub fn exec_bgt(instr: &mut BType) -> bool {
+    let reg_1_value = instr.reg_1.value.parse::<i32>().unwrap();
+    let reg_2_value = instr.reg_1.value.parse::<i32>().unwrap();
+
+    return reg_1_value > reg_2_value;
+}
 
 

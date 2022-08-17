@@ -12,7 +12,6 @@ pub fn _exec_r_type(instruction: &Vec<&str>, registers: &mut HashMap<String, Reg
     let reg_3: Register = get_read_reg(instruction[2].trim(), registers);
     let reg_1: &mut Register = registers.get_mut(instr_reg_1[1].trim()).expect("Unknown Register");
 
-
     let mut r_type_instr: RType = RType {
         name: instr,
         reg_1: reg_1.clone(),

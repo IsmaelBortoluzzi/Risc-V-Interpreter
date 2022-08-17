@@ -5,13 +5,14 @@ use crate::{registers::registers::Register, dot_data::data::DotDataVariable};
 use super::R_type;
 use super::I_type;
 use super::I_type::load_utils::*;
+use super::B_type;
 
 
 #[derive(Debug)]
 pub enum InstructionType {
     B,
     I,
-    ILoad,
+    ILoad,  // Loads are I type instructions, but we better treat them here individually
     J,
     R,
     S,
@@ -153,7 +154,7 @@ pub fn exec_b_type(
     labels: &mut HashMap<String, usize>,
     current_line: &mut usize,
 ) {
-
+    B_type::pub_utils::_exec_b_type(instruction, registers, labels, current_line)
 }
 
 

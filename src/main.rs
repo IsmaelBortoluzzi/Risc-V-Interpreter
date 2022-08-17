@@ -10,7 +10,7 @@ use {
         Register
     },
     file_reader::reader::{
-        reader,
+        file_reader,
         normalize_dotmain,
     },
     std::{
@@ -29,7 +29,7 @@ fn main() {
     env::set_var("RUST_BACKTRACE", "1");
 
     // lines of the file
-    let mut lines: Vec<String> = reader();
+    let mut lines: Vec<String> = file_reader();
     normalize_dotmain(&mut lines);
     
     // registers
