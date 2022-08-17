@@ -4,14 +4,6 @@ use std::collections::HashMap;
 use crate::{dot_data::data::{DotDataVariable, Type}, registers::registers::Register};
 
 
-pub fn get_read_reg(key: &str, registers: &mut HashMap<String, Register>) -> Register {
-    let reg: Option<&mut Register> = registers.get_mut(key);
-    match reg {
-        Some(r) => r.clone(),
-        None => { panic!("Unkown Register"); }
-    }
-}
-
 pub fn get_read_reg_value(key: &str, registers: &mut HashMap<String, Register>) -> i64 {
     let reg: Option<&mut Register> = registers.get_mut(key);
     match reg {
@@ -99,7 +91,6 @@ pub fn exec_lw(
             reg_1.value = String::from(inmemory_data);
         },
     }
-    let a = "";
 }
 
 

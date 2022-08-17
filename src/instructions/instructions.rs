@@ -2,8 +2,8 @@ use std::collections::HashMap;
 
 use crate::{registers::registers::Register, dot_data::data::DotDataVariable};
 
-use super::R_type::R_type::RType;
-use super::I_type::I_type::IType;
+use super::R_type;
+use super::I_type;
 use super::I_type::load_utils::*;
 
 
@@ -15,7 +15,6 @@ pub enum InstructionType {
     J,
     R,
     S,
-    Error,
 }
 
 impl InstructionType {
@@ -29,7 +28,7 @@ impl InstructionType {
             "blt" | "beq" | "bgt" => { InstructionType::B },
             "j" | "jal" | "jalr" => { InstructionType::J },
             "sw" | "sb" => { InstructionType::S },
-            _ => { InstructionType::Error }
+            _ => { panic!("Unsupported Instruction!") },
         }
 
     }
@@ -73,8 +72,6 @@ pub enum InstructionName {
     Jal,
     Jalr,
 
-    Error
-
 }
 
 impl InstructionName {
@@ -88,12 +85,12 @@ impl InstructionName {
             "sll" => { InstructionName::Sll },
             "xor" => { InstructionName::Xor },
             "or" => { InstructionName::Or },
-            "and" => { InstructionName::Add },
+            "and" => { InstructionName::And },
             "addi" => { InstructionName::Addi },
             "slli" => { InstructionName::Slli },
             "xori" => { InstructionName::Xori },
             "ori" => { InstructionName::Ori },
-            "andi" => { InstructionName::Addi },
+            "andi" => { InstructionName::Andi },
             "lw" => { InstructionName::Lw },
             "la"  => { InstructionName::La },
             "lb" => { InstructionName::Lb },
@@ -105,74 +102,31 @@ impl InstructionName {
             "jalr" => { InstructionName::Jalr },
             "sw" => { InstructionName::Sw },
             "sb"  => { InstructionName::Sb },
-            _ => { InstructionName::Error },
+            _ => { panic!("Unsupported Instruction!") },
         }
     }
 }
 
 
-pub fn exec_r_type(instruction: &Vec<&str>, registers: &mut HashMap<String, Register>,) {
-    let instr_reg_1: Vec<&str> = instruction[0].split(" ").collect();
-    let instr: InstructionName = InstructionName::str_to_instr_name(instr_reg_1[0]);
-    
-    match instr {
-        InstructionName::Error => { panic!("Unknown Instruction!"); },
-        _ => {}
+pub fn get_read_reg(key: &str, registers: &mut HashMap<String, Register>) -> Register {
+    let reg: Option<&mut Register> = registers.get_mut(key);
+    match reg {
+        Some(r) => r.clone(),
+        None => { panic!("Unkown Register"); }
     }
-    let _none: String = String::from("none");
+}
 
 
-    let reg_2: Register;
-    {
-        let reg_2_aux: &mut Register = registers.entry(instruction[1].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
-        reg_2 = reg_2_aux.clone();
-    }
+pub fn exec_r_type(instruction: &Vec<&str>, registers: &mut HashMap<String, Register>) {
 
-    let reg_3: Register;
-    {
-        let reg_3_aux: &mut Register = registers.entry(instruction[2].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
-        reg_3 = reg_3_aux.clone();
-    }    
-
-    let reg_1: &mut Register = registers.entry(instr_reg_1[1].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
-
-
-    let mut r_type_instr: RType = RType {
-        name: instr,
-        reg_1: reg_1.clone(),
-        reg_2: reg_2,
-        reg_3: reg_3,
-    };
-
-    r_type_instr.exec();
-    reg_1.copy_attrs(&r_type_instr.reg_1);
-
+    R_type::pub_utils::_exec_r_type(instruction, registers)
 
 }
 
 
 pub fn exec_i_type(instruction: &Vec<&str>, registers: &mut HashMap<String, Register>) {
-    let instr_reg_1: Vec<&str> = instruction[0].split(" ").collect();
-    let instr: InstructionName = InstructionName::str_to_instr_name(instr_reg_1[0]);
-    
-    let imm: i32 = instruction[2].trim().parse().unwrap();
-    let reg_2: Register;
-    {
-        let reg_2_aux: &mut Register = registers.entry(instruction[1].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
-        reg_2 = reg_2_aux.clone();
-    }
-    let reg_1: &mut Register = registers.entry(instr_reg_1[1].trim().to_string()).or_insert_with_key(|_none| Register {name: "".to_string(), register: "".to_string(), value: "".to_string()});
-
-
-    let mut r_type_instr: IType = IType {
-        name: instr,
-        reg_1: reg_1.clone(),
-        reg_2: reg_2,
-        imm: imm,
-    };
-
-    r_type_instr.exec();
-    reg_1.copy_attrs(&r_type_instr.reg_1);
+   
+    I_type::pub_utils::_exec_i_type(instruction,registers)
 
 }
 

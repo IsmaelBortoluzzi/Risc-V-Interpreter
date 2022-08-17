@@ -74,7 +74,6 @@ pub fn run(
             InstructionType::J => { exec_j_type(&instruction, registers, &mut labels, &mut line); },
             InstructionType::R => { exec_r_type(&instruction, registers); },
             InstructionType::S => { exec_s_type(&instruction, registers, data); },
-            InstructionType::Error => { panic!("Unknown Instruction!"); }
         }
     
         line += 1;

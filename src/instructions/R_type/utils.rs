@@ -1,10 +1,10 @@
+use std::collections::HashMap;
+
+use crate::{registers::registers::Register, instructions::instructions::{InstructionName, get_read_reg}};
+
 use super::R_type::RType;
 
-// pub struct Register {
-//     register: String,
-//     name: String,
-//     value: String,
-// }
+
 pub fn exec_add(instr: &mut RType) {
     let sum: i32 = &instr.reg_2.value.parse::<i32>().unwrap() + &instr.reg_3.value.parse::<i32>().unwrap();
     instr.reg_1.value = sum.to_string();
@@ -56,4 +56,5 @@ pub fn exec_and(instr: &mut RType) {
     let result: i32 = &instr.reg_2.value.parse::<i32>().unwrap() & &instr.reg_3.value.parse::<i32>().unwrap();
     instr.reg_1.value = result.to_string();
 }
+
 
