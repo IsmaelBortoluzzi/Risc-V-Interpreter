@@ -3,6 +3,57 @@ use std::collections::HashMap;
 
 use crate::{dot_data::data::{DotDataVariable, Type}, registers::registers::Register};
 
+
+pub fn get_read_reg(key: &str, registers: &mut HashMap<String, Register>) -> Register {
+    let reg: Option<&mut Register> = registers.get_mut(key);
+    match reg {
+        Some(r) => r.clone(),
+        None => { panic!("Unkown Register"); }
+    }
+}
+
+pub fn get_read_reg_value(key: &str, registers: &mut HashMap<String, Register>) -> i64 {
+    let reg: Option<&mut Register> = registers.get_mut(key);
+    match reg {
+        Some(result) => { 
+            match result.value.as_str().parse::<i64>() {
+                Ok(reg_ref) => reg_ref,
+                _ => { panic!("Addresses are always decimal numbers!!"); }
+            }
+        },
+        None => { panic!("Unkown Register!"); }
+    }
+}
+
+
+pub fn get_memory_position<'a>(
+    data: &'a &mut HashMap<String, DotDataVariable>, 
+    ordered_dotdata: Vec<(&String, &DotDataVariable)>,
+    reg_2_stored_address: i64
+) -> &'a DotDataVariable {
+    
+    let mut counter: usize = 1;
+    while counter < ordered_dotdata.len() {
+        let previous_address: &i64 = &ordered_dotdata[counter-1].1.v_address;
+        let current_address: &i64 = &ordered_dotdata[counter].1.v_address;
+        
+        if reg_2_stored_address <= *previous_address && *current_address > reg_2_stored_address {
+            match data.get(ordered_dotdata[counter-1].0) {
+                Some(value) => { return value; },
+                None => { break; }
+            }
+        } 
+        counter += 1;
+    }
+
+    if let Some(value) = data.get(ordered_dotdata[counter-1].0) {
+        return value;
+    }
+
+    panic!("Address is not allocated with values!");
+}
+
+
 pub fn exec_lw(
     instruction: &Vec<&str>,  // ["lw a0", "0(t0)"]
     registers: &mut HashMap<String, Register>,
@@ -14,7 +65,7 @@ pub fn exec_lw(
         .trim()
         .to_string();  // ["lw", "a0"] -> "a0"
     
-    let indexes_after_address = instruction[1]
+    let indexes_after_address: i64 = instruction[1]
         .trim()
         .split("(")
         .collect::<Vec<&str>>()[0]
@@ -29,35 +80,15 @@ pub fn exec_lw(
     
     source_reg.pop();  // "t0"
 
-    let reg_2: Register;
-    {
-        let reg_2_aux: &mut Register = registers
-            .get_mut(source_reg.as_str())
-            .unwrap();
-        reg_2 = reg_2_aux.clone();
-    }
-
+    let reg_2_stored_address: i64 = get_read_reg_value(source_reg.as_str(), registers);
     let reg_1: &mut Register = registers.get_mut(destination_reg.as_str()).unwrap();
-    
-    let reg_2_stored_address: i64 = reg_2.value.parse::<i64>().unwrap();
     
     let mut ordered_dotdata = data
         .iter()
         .collect::<Vec<(&String, &DotDataVariable)>>();
     ordered_dotdata.sort_unstable_by_key(|t| t.1.v_address);
 
-    let mut counter: usize = 1;
-    let mut stored_data: &DotDataVariable = & DotDataVariable { v_address: -1, v_value: Type::Str("".to_string()) };
-    while counter < ordered_dotdata.len() {
-        let previous_address: &i64 = &ordered_dotdata[counter-1].1.v_address;
-        let current_address: &i64 = &ordered_dotdata[counter].1.v_address;
-        stored_data = data.get(ordered_dotdata[counter-1].0).unwrap();
-
-        if reg_2_stored_address <= *previous_address && *current_address > reg_2_stored_address {
-            break;
-        } 
-        counter += 1;
-    }
+    let stored_data: &DotDataVariable = get_memory_position(&data, ordered_dotdata, reg_2_stored_address);
     
     let index: usize = (indexes_after_address / 4) as usize;
     match &stored_data.v_value {
