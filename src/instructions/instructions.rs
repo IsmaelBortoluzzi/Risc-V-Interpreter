@@ -6,6 +6,8 @@ use super::R_type;
 use super::I_type;
 use super::I_type::load_utils::*;
 use super::B_type;
+use super::J_type;
+
 
 
 #[derive(Debug)]
@@ -164,7 +166,9 @@ pub fn exec_j_type(
     labels: &mut HashMap<String, usize>,
     current_line: &mut usize,
 ) {
-
+    
+    J_type::pub_utils::_exec_j_type(instruction, registers, labels, current_line)
+    
 }
 
 
