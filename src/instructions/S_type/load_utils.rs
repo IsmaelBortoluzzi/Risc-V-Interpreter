@@ -58,7 +58,7 @@ pub fn exec_lw(
         .to_string();  // ["lw", "a0"] -> "a0"
     
     let indexes_after_address: i64 = instruction[1]
-        .replace(" ", "")
+        .trim()
         .split("(")
         .collect::<Vec<&str>>()[0]
         .parse::<i64>()
@@ -103,7 +103,7 @@ pub fn exec_la(
     let dot_data_label = data.get_mut(&instruction[1].trim().to_string()).unwrap();
 
     registers.get_mut(&destination_reg).unwrap().value = dot_data_label.v_address.to_string();
-}
+} 
 
 
 pub fn exec_lb(

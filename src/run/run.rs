@@ -37,6 +37,13 @@ pub fn get_all_labels(lines: &mut Vec<String>) -> HashMap<String, usize> {
 }
 
 
+fn clear_zero(zero: &mut Register) {
+    if zero.value.as_str() != "0" {
+        zero.value = String::from("0");
+    }
+}
+
+
 pub fn run(
     data: &mut HashMap<String, DotDataVariable>, 
     registers: &mut HashMap<String, Register>, 
@@ -70,7 +77,8 @@ pub fn run(
             InstructionType::R => { exec_r_type(&instruction, registers); },
             InstructionType::S => { exec_s_type(&instruction, registers, data); },
         }
-    
+        
+        clear_zero(registers.get_mut("zero").unwrap());
         line += 0;
     }
 }

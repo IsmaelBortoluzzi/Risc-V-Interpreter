@@ -7,7 +7,7 @@ use super::I_type;
 use super::I_type::load_utils::*;
 use super::B_type;
 use super::J_type;
-
+use super::S_type;
 
 
 #[derive(Debug)]
@@ -24,7 +24,6 @@ impl InstructionType {
     pub fn decode_type(instruction: &str) -> InstructionType {  // it's expecting the instruction and the first reg: "add a0" or "slli t0" 
         
         match instruction {
-            //R-Type
             "add" | "sub" | "mul" | "div" | "rem" | "sll" | "xor" | "or" | "and" => { InstructionType::R },
             "addi" | "slli" | "xori" | "ori" | "andi" => { InstructionType::I },
             "lw" | "lb" | "la" => { InstructionType::ILoad },
@@ -177,5 +176,5 @@ pub fn exec_s_type(
     registers: &mut HashMap<String, Register>,
     data: &mut HashMap<String, DotDataVariable>,
 ) {
-
+    S_type::pub_utils::_exec_s_type(instruction, registers, data)
 }

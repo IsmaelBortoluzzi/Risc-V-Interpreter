@@ -34,7 +34,6 @@ pub struct DotDataVariable {
 pub fn store_dot_data(lines: &mut Vec<String>) -> HashMap<String, DotDataVariable> {
     let mut dot_data: HashMap<String, DotDataVariable> = HashMap::new();
 
-    lines.remove(0);  // remove .data
     let mut line: usize = 0;  
     let mut address: i64 = 100;
 
@@ -84,7 +83,7 @@ pub fn store_dot_data(lines: &mut Vec<String>) -> HashMap<String, DotDataVariabl
                 let string: String;
                 {
                     let values_raw: Vec<&str> = type_value.split("\"").collect();
-                    string = values_raw[values_raw.len() - 2].to_string();
+                    string = values_raw[values_raw.len() - 2].to_string().replace("\\n", "\n");
                 }
 
                 data = DotDataVariable {
