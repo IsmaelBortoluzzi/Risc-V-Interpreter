@@ -80,7 +80,8 @@ pub fn exec_sw(
 
 }
 
-pub fn _exec_s_type(instruction: &Vec<&str>, 
+pub fn _exec_s_type(
+    instruction: &Vec<&str>,
     registers: &mut HashMap<String, Register>,
     data: &mut HashMap<String, DotDataVariable>,
 ) {
