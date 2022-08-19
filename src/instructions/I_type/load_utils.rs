@@ -29,7 +29,7 @@ pub fn get_memory_position<'a>(
         let previous_address: &i64 = &ordered_dotdata[counter-1].1.v_address;
         let current_address: &i64 = &ordered_dotdata[counter].1.v_address;
         
-        if reg_2_stored_address <= *previous_address && *current_address > reg_2_stored_address {
+        if *previous_address <= reg_2_stored_address && *current_address > reg_2_stored_address {
             match data.get(ordered_dotdata[counter-1].0) {
                 Some(value) => { return value; },
                 None => { break; }
@@ -83,13 +83,13 @@ pub fn exec_lw(
     let stored_data: &DotDataVariable = get_memory_position(&data, ordered_dotdata, reg_2_stored_address);
     
     let index: usize = (indexes_after_address / 4) as usize;
+    
     match &stored_data.v_value {
         Type::Int(inmemory_data) => {
-            reg_1.value = inmemory_data[index].to_string();
+            let requested_position = (reg_2_stored_address - stored_data.v_address) / 4;
+            reg_1.value = inmemory_data[index + requested_position as usize].to_string();
         },
-        Type::Str(inmemory_data) => {
-            reg_1.value = String::from(inmemory_data);
-        },
+        _ => {panic!("Not a .word!");}
     }
 }
 

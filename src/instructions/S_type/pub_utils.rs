@@ -1,19 +1,17 @@
 use std::collections::HashMap;
 
-use crate::{instructions::{instructions::{InstructionName, get_read_reg}, I_type::load_utils::{get_read_reg_value}}, registers::registers::Register, dot_data::data::DotDataVariable};
+use crate::{instructions::{instructions::{InstructionName}, I_type::load_utils::{get_read_reg_value}}, registers::registers::Register, dot_data::data::DotDataVariable};
 
 use super::S_type::SType;
 
 
-fn get_ordered_data(data: &HashMap<String, DotDataVariable>) -> Vec<(&String, &DotDataVariable)> {
-    let mut ordered_dotdata = data
-        .iter()
-        .collect::<Vec<(&String, &DotDataVariable)>>();
-    
-    ordered_dotdata.sort_unstable_by_key(|t| t.1.v_address);
-    ordered_dotdata
+pub fn get_reg_copy(key: &str, registers: &mut HashMap<String, Register>) -> Register {
+    let reg: Option<&Register> = registers.get(key);
+    match reg {
+        Some(result) => result.clone(),
+        None => { panic!("Unknown Register!"); }
+    }
 }
-
 
 // pub fn get_mut_memory_position<'a>(
 //     data: &'a mut HashMap<String, DotDataVariable>,
@@ -59,11 +57,11 @@ pub fn exec_sw(
         .trim()
         .to_string();  // ["sw", "a0"] -> "a0"
     
-    let indexes_after_address: i64 = instruction[1]
+    let indexes_after_address: i32 = instruction[1]
         .replace(" ", "")
         .split("(")
         .collect::<Vec<&str>>()[0]
-        .parse::<i64>()
+        .parse::<i32>()
         .unwrap();  // ["0", "t0)"] -> 0
     
     let mut destination_address: String = instruction[1]
@@ -74,9 +72,17 @@ pub fn exec_sw(
     
     destination_address.pop();  // "t0"
 
-    let reg_2_stored_address: i64 = get_read_reg_value(destination_address.as_str(), registers);
-    let reg_1: Register = registers.get(source_reg.as_str()).expect("Unknown Register").clone();
+    let reg_2: Register = get_reg_copy(destination_address.as_str(), registers);
+    let reg_1: &mut Register = registers.get_mut(source_reg.as_str()).expect("Unknown Register!");
 
+    let mut sw: SType = SType {
+        name: InstructionName::Sw,
+        reg_1: reg_1,
+        reg_2: reg_2,
+        imm: indexes_after_address,
+    };
+
+    sw.exec(data);
 
 }
 
