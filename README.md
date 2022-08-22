@@ -18,6 +18,7 @@
 
 - [Quick start](#quick-start)
 - [Exemple Program](#exemple-program)
+- [Ecalls Supported](#ecalls-supported)
 - [Instructions Supported](#instructions-supported)
 - [Not Yet Supported Features](#not-yet-supported-features)
 - [What's included](#whats-included)
@@ -153,6 +154,9 @@ The program will take a file path as an arg in the command line
     J,
     Jal,
     Jalr,
+
+## Ecalls Supported
+    10 => finish program
 
 ## Not Yet Supported Features
 - The stack
