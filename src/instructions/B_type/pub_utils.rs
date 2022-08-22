@@ -37,6 +37,6 @@ pub fn _exec_b_type(
 
     if !is_true { return; }
 
-    *current_line = label_line - 1;
+    *current_line = *label_line - 1;
 
 }

@@ -53,15 +53,16 @@ pub fn run(
     let mut labels: HashMap<String, usize> = get_all_labels(lines);
 
     while line < lines.len() {
-        line += 1; 
         lines[line] = lines[line].trim().to_string();
 
         if lines[line].is_empty() {
+            line += 1; 
             continue;
         }
         
         let check_if_label: Vec<&str> = lines[line].split(":").collect();
         if check_if_label.len() > 1 {
+            line += 1; 
             continue;
         }
 
@@ -79,6 +80,6 @@ pub fn run(
         }
         
         clear_zero(registers.get_mut("zero").unwrap());
-        line += 0;
+        line += 1;
     }
 }

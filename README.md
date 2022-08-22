@@ -35,7 +35,7 @@ The program will take a file path as an arg in the command line
 - Install rust [toolchain](https://www.rust-lang.org/tools/install)
 - Within project root, on cli, run:
   - cargo run "file.extension"
-- Now you should see the result if you assembly code is correct :)
+- Now you should see the result if your assembly code is correct :)
 
 ## Exemple Program
     To be added soon 

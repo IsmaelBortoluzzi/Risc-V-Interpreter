@@ -46,4 +46,19 @@ fn main() {
     for x in labels.iter() {
         println!("{}: {:?}", *(x.0), *(x.1));
     }
+
+    println!("\n.DATA");
+    for x in data.iter() {
+        println!("{}: {:?}", *(x.0), *(x.1));
+    }
+
+    println!("\nREGS");
+    for x in registers.iter() {
+        println!("{}: {:?}", *(x.0), *(x.1));
+    }
+    println!("\nLINES:");
+    for x in lines.iter() {
+        println!("{}", *(x));
+    }
+    
 }
