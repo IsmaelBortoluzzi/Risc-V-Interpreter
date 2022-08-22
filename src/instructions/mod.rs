@@ -4,3 +4,4 @@ pub mod I_type;
 pub mod B_type;
 pub mod J_type;
 pub mod S_type;
+pub mod ecall;

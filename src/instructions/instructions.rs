@@ -8,6 +8,8 @@ use super::I_type::load_utils::*;
 use super::B_type;
 use super::J_type;
 use super::S_type;
+use super::ecall;
+
 
 
 #[derive(Debug)]
@@ -18,6 +20,7 @@ pub enum InstructionType {
     J,
     R,
     S,
+    Ecall,
 }
 
 impl InstructionType {
@@ -30,6 +33,7 @@ impl InstructionType {
             "blt" | "beq" | "bgt" => { InstructionType::B },
             "j" | "jal" | "jalr" => { InstructionType::J },
             "sw" | "sb" => { InstructionType::S },
+            "ecall" => { InstructionType::Ecall },
             _ => { panic!("Unsupported Instruction!") },
         }
 
@@ -177,4 +181,9 @@ pub fn exec_s_type(
     data: &mut HashMap<String, DotDataVariable>,
 ) {
     S_type::pub_utils::_exec_s_type(instruction, registers, data)
+}
+
+
+pub fn exec_ecall(registers: &mut HashMap<String, Register>, current_line: &mut usize) {
+    ecall::ecall::_exec_ecall(registers, current_line)
 }

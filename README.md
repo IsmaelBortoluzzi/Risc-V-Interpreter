@@ -38,7 +38,86 @@ The program will take a file path as an arg in the command line
 - Now you should see the result if your assembly code is correct :)
 
 ## Exemple Program
-    To be added soon 
+    .data
+    DIVIDENDO: .word -118
+    SPACE:.asciz " "
+    DIVISOR: .word 7
+    ARRAY: .word -118, 8, 7, 99
+    RESULT: .word -1
+
+    .text
+
+    .main:
+      # euclidean division algorithm
+
+      la a0, DIVIDENDO
+      la a1, DIVISOR
+
+      lw a0, 0(a0)
+      lw a1, 0(a1)
+      
+      jal floorDiv
+      
+      la t0, RESULT
+      sw a0, 0(t0)
+      
+      addi a7, zero, 10
+      ecall
+
+
+    floorDiv:
+      blt a0, zero, normUp
+      addi t5, zero, 0
+
+    afterNormUp:
+      blt a1, zero, normBottom
+      addi t6, zero, 0
+
+    afterNormBottom:
+      addi t0, zero, 0
+        
+      j while
+
+    normUp:
+      xori a0, a0, -1
+      addi a0, a0, 1
+
+      addi t5, zero, 1
+      
+      j afterNormUp
+
+
+    normBottom:
+      xori a1, a1, -1
+      addi a1, a1, 1
+      
+      addi t6, zero, 1
+      
+      j afterNormBottom
+
+    while:
+      blt a0, a1, endWhile
+      sub a0, a0, a1
+      
+      addi t0, t0, 1
+      
+      j while
+
+    endWhile:
+      xor t1, t5, t6
+      bgt t1, zero, changeSign
+      j endFloorDiv
+      
+    changeSign:
+      xori t0, t0, -1
+      addi t0, t0, 1
+
+    endFloorDiv:
+      addi a1, a0, 0
+      addi a0, t0, 0
+
+      jalr zero, ra, 0
+
 
 ## Instructions Supported
     // R-type

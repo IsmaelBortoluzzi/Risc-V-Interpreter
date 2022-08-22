@@ -55,7 +55,7 @@ pub fn run(
     while line < lines.len() {
         lines[line] = lines[line].trim().to_string();
 
-        if lines[line].is_empty() {
+        if lines[line].is_empty() || lines[line].chars().next().unwrap() == '#'  {
             line += 1; 
             continue;
         }
@@ -77,6 +77,7 @@ pub fn run(
             InstructionType::J => { exec_j_type(&instruction, registers, &mut labels, &mut line); },
             InstructionType::R => { exec_r_type(&instruction, registers); },
             InstructionType::S => { exec_s_type(&instruction, registers, data); },
+            InstructionType::Ecall => { exec_ecall(registers, &mut line) }
         }
         
         clear_zero(registers.get_mut("zero").unwrap());
