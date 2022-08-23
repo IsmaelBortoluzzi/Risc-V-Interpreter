@@ -4,6 +4,7 @@ use {
         dot_data::data::DotDataVariable,
         registers::registers::Register,
         instructions::instructions::*,
+        stack::stack::Stack,
     },
 };
 
@@ -47,7 +48,8 @@ fn clear_zero(zero: &mut Register) {
 pub fn run(
     data: &mut HashMap<String, DotDataVariable>, 
     registers: &mut HashMap<String, Register>, 
-    lines: &mut Vec<String>
+    lines: &mut Vec<String>,
+    stack: &mut Stack
 ) {
     let mut line: usize = get_start(lines) - 1;
     let mut labels: HashMap<String, usize> = get_all_labels(lines);
@@ -76,7 +78,7 @@ pub fn run(
             InstructionType::ILoad => { exec_i_type_load(&instruction, registers, data); },
             InstructionType::J => { exec_j_type(&instruction, registers, &mut labels, &mut line); },
             InstructionType::R => { exec_r_type(&instruction, registers); },
-            InstructionType::S => { exec_s_type(&instruction, registers, data); },
+            InstructionType::S => { exec_s_type(&instruction, registers, data, stack); },
             InstructionType::Ecall => { exec_ecall(registers, &mut line) }
         }
         

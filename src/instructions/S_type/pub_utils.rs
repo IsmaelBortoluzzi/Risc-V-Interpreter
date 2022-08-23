@@ -1,8 +1,17 @@
-use std::collections::HashMap;
-
-use crate::{instructions::{instructions::{InstructionName}, I_type::load_utils::{get_read_reg_value}}, registers::registers::Register, dot_data::data::DotDataVariable};
-
-use super::S_type::SType;
+use {
+    std::collections::HashMap,
+    crate::{
+        instructions::{
+            instructions::{
+                InstructionName,
+            },
+        }, 
+        registers::registers::Register, 
+        dot_data::data::DotDataVariable,
+        stack::stack::Stack,
+    },
+    super::S_type::SType
+};
 
 
 pub fn get_reg_copy(key: &str, registers: &mut HashMap<String, Register>) -> Register {
@@ -13,43 +22,12 @@ pub fn get_reg_copy(key: &str, registers: &mut HashMap<String, Register>) -> Reg
     }
 }
 
-// pub fn get_mut_memory_position<'a>(
-//     data: &'a mut HashMap<String, DotDataVariable>,
-//     reg_2_stored_address: i64
-// ) -> &'a mut DotDataVariable {
-    
-//     let mut ordered_dotdata = data
-//         .iter()
-//         .collect::<Vec<(&String, &DotDataVariable)>>();
-    
-//     ordered_dotdata.sort_unstable_by_key(|t| t.1.v_address);
-
-//     let mut counter: usize = 1;
-//     while counter < ordered_dotdata.len() {
-//         let previous_address: &i64 = &ordered_dotdata[counter-1].1.v_address;
-//         let current_address: &i64 = &ordered_dotdata[counter].1.v_address;
-        
-//         if reg_2_stored_address <= *previous_address && *current_address > reg_2_stored_address {
-//             match data.get_mut(ordered_dotdata[counter-1].0) {
-//                 Some(value) => { return value; },
-//                 None => { break; }
-//             }
-//         } 
-//         counter += 1;
-//     }
-
-//     if let Some(value) = data.get_mut(ordered_dotdata[counter-1].0) {
-//         return value;
-//     }
-
-//     panic!("Address is not allocated with values!");
-// }
-
 
 pub fn exec_sw(
     instruction: &Vec<&str>,  // ["sw a0", "0(t0)"]
     registers: &mut HashMap<String, Register>,
-    mut data: &mut HashMap<String, DotDataVariable>,
+    data: &mut HashMap<String, DotDataVariable>,
+    stack: &mut Stack,
 ) {
     let source_reg: String  = instruction[0]
         .split(" ")
@@ -82,7 +60,7 @@ pub fn exec_sw(
         imm: indexes_after_address,
     };
 
-    sw.exec(data);
+    sw.exec(data, stack);
 
 }
 
@@ -90,10 +68,11 @@ pub fn _exec_s_type(
     instruction: &Vec<&str>,
     registers: &mut HashMap<String, Register>,
     data: &mut HashMap<String, DotDataVariable>,
+    stack: &mut Stack
 ) {
     let instr = instruction[0].split(" ").next().expect("Sintax Error!");
     match instr {
-        "sw" => exec_sw(instruction, registers, data),
+        "sw" => exec_sw(instruction, registers, data, stack),
         "sb" => {}
         _ => {}
     }

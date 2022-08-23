@@ -3,6 +3,7 @@ mod registers;
 mod dot_data;
 mod run;
 mod instructions;
+mod stack;
 
 use {
     registers::registers::{
@@ -17,11 +18,14 @@ use {
         collections::HashMap,
         env,
     },
-    dot_data::data::{DotDataVariable, store_dot_data},
+    dot_data::data::{
+        DotDataVariable,
+        store_dot_data
+    },
     run::run::{
         run,
-        get_all_labels,
     },
+    stack::stack::Stack,
 };
 
 
@@ -38,8 +42,12 @@ fn main() {
     // store data defined in .data
     let mut data: HashMap<String, DotDataVariable> = store_dot_data(&mut lines);
 
+    // stack
+    let mut stack: Stack = Vec::with_capacity(1024*4);  // 10kb of stack space
+    unsafe { stack.set_len(1024*4); }
+
     // execute program line by line
-    run(&mut data, &mut registers, &mut lines);
+    run(&mut data, &mut registers, &mut lines, &mut stack);
 
     println!("\n.DATA");
     for x in data.iter() {
@@ -49,6 +57,11 @@ fn main() {
     println!("\nREGS");
     for x in registers.iter() {
         println!("{}: {:?}", *(x.0), *(x.1));
+    }
+
+    println!("\nStack:");
+    for x in stack.iter() {
+        println!("{}", *(x));
     }
 
     println!("\nLINES:");

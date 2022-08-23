@@ -1,7 +1,3 @@
-use std::collections::HashMap;
-
-use crate::{registers::registers::Register, instructions::instructions::{InstructionName, get_read_reg}};
-
 use super::R_type::RType;
 
 

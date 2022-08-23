@@ -1,7 +1,13 @@
-use std::collections::HashMap;
-
-
-use crate::{dot_data::data::{DotDataVariable, Type}, registers::registers::Register};
+use {
+    std::collections::HashMap,
+    crate::{
+        dot_data::data::{
+            DotDataVariable, 
+            Type
+        }, 
+        registers::registers::Register,
+    }
+};
 
 
 pub fn get_read_reg_value(key: &str, registers: &mut HashMap<String, Register>) -> i64 {

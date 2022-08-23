@@ -1,15 +1,19 @@
-use std::collections::HashMap;
 
-use crate::{registers::registers::Register, dot_data::data::DotDataVariable};
-
-use super::R_type;
-use super::I_type;
-use super::I_type::load_utils::*;
-use super::B_type;
-use super::J_type;
-use super::S_type;
-use super::ecall;
-
+use {
+    std::collections::HashMap,
+    crate::{
+        registers::registers::Register,
+        dot_data::data::DotDataVariable,
+        stack::stack::Stack,
+    },
+    super::R_type,
+    super::I_type,
+    super::I_type::load_utils::*,
+    super::B_type,
+    super::J_type,
+    super::S_type,
+    super::ecall,
+};
 
 
 #[derive(Debug)]
@@ -179,8 +183,9 @@ pub fn exec_s_type(
     instruction: &Vec<&str>, 
     registers: &mut HashMap<String, Register>,
     data: &mut HashMap<String, DotDataVariable>,
+    stack: &mut Stack
 ) {
-    S_type::pub_utils::_exec_s_type(instruction, registers, data)
+    S_type::pub_utils::_exec_s_type(instruction, registers, data, stack)
 }
 
 

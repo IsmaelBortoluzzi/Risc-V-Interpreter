@@ -1,9 +1,38 @@
-use std::collections::HashMap;
+use {
+    std::collections::HashMap,
+    super::S_type::SType,
+    crate::{
+        dot_data::data::{
+            DotDataVariable, 
+            Type,
+        },
+        stack::{
+            stack::Stack,
+            pub_utils::*,
+        },
+    },
+};
 
-use crate::dot_data::data::{DotDataVariable, Type};
 
-use super::S_type::SType;
+fn exec_sw_stack(stack: &mut Stack, instr: &mut SType) { 
+    let mut address = instr.reg_2.value.parse::<usize>().expect("sp value should be a number!");
 
+    if (address - 983616) % 4 != 0 {
+        panic!("Memory unaligned!");
+    }
+    
+    if address < 983616 { // 983616 is the min address (16kb of stack is allocated)
+        panic!("Stack overflow!");
+    }
+    else if address > 1000000 {
+        panic!("Address does not belong to stack!");
+    }
+    
+    address = (address - 983616 - 1/*1 less than len*/) / 4 + instr.imm as usize;
+    
+    stack[address] = String::from(instr.reg_1.value.as_str());
+
+}
 
 
 fn get_ordered_data<'a>(data: *const HashMap<String, DotDataVariable>) -> Vec<(&'a String, &'a DotDataVariable)> {
@@ -46,7 +75,13 @@ pub fn get_insert_position<'a>(
 }
 
 
-pub fn exec_sw(instr: &mut SType, data: &mut HashMap<String, DotDataVariable>) {
+pub fn exec_sw(instr: &mut SType, data: &mut HashMap<String, DotDataVariable>, stack: &mut Stack) {
+
+    if is_stack_operation(instr) { 
+        exec_sw_stack(stack, instr); 
+        return;
+    }
+
     let re_2_stored_address: &i64 = &instr.reg_2.value.parse::<i64>().unwrap();
     let insert_position = get_insert_position(data, re_2_stored_address);
     
@@ -63,7 +98,7 @@ pub fn exec_sw(instr: &mut SType, data: &mut HashMap<String, DotDataVariable>) {
 }
 
 
-pub fn exec_sb(instr: &mut SType, data: &mut HashMap<String, DotDataVariable>) {
+pub fn exec_sb(instr: &mut SType, data: &mut HashMap<String, DotDataVariable>, stack: &mut Stack) {
     let result: i32 = *(&instr.reg_2.value.parse::<i32>().unwrap()) << &instr.imm;
     instr.reg_1.value = result.to_string();
 }

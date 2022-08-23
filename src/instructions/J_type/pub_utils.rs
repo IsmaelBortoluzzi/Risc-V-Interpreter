@@ -1,6 +1,12 @@
-use std::{collections::HashMap, clone};
-
-use crate::{registers::registers::Register, instructions::instructions::InstructionName};
+use {
+    std::{
+        collections::HashMap,
+    },
+    crate::{
+        registers::registers::Register,
+        instructions::instructions::InstructionName,
+    },
+};
 
 use super::J_type::JType;
 
