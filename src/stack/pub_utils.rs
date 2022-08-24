@@ -1,17 +1,8 @@
-use {
-    crate::{
-        instructions::{
-            S_type::S_type::SType,
-        },
-        registers::registers::Register, 
-    },
-};
-
-
-pub fn is_stack_operation(instr: &SType) -> bool {
+pub fn is_stack_operation(reg: &str) -> bool {
     
-    if instr.reg_2.name.as_str() != "sp" {
+    if reg != "sp" {
         return false;
     }
     true
+
 }

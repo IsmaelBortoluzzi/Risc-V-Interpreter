@@ -75,7 +75,7 @@ pub fn run(
         match instr_type {
             InstructionType::B => { exec_b_type(&instruction, registers, &mut labels, &mut line); },
             InstructionType::I => { exec_i_type(&instruction, registers); },
-            InstructionType::ILoad => { exec_i_type_load(&instruction, registers, data); },
+            InstructionType::ILoad => { exec_i_type_load(&instruction, registers, data, stack); },
             InstructionType::J => { exec_j_type(&instruction, registers, &mut labels, &mut line); },
             InstructionType::R => { exec_r_type(&instruction, registers); },
             InstructionType::S => { exec_s_type(&instruction, registers, data, stack); },

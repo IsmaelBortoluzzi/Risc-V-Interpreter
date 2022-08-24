@@ -74,19 +74,19 @@ pub fn get_insert_position<'a>(
 
 pub fn exec_sw(instr: &mut SType, data: &mut HashMap<String, DotDataVariable>, stack: &mut Stack) {
 
-    if is_stack_operation(instr) { 
+    if is_stack_operation(&instr.reg_2.name.as_str()) { 
         exec_sw_stack(stack, instr); 
         return;
     }
 
-    let re_2_stored_address: &i64 = &instr.reg_2.value.parse::<i64>().unwrap();
-    let insert_position = get_insert_position(data, re_2_stored_address);
+    let reg_2_stored_address: &i64 = &instr.reg_2.value.parse::<i64>().unwrap();
+    let insert_position = get_insert_position(data, reg_2_stored_address);
     
     let index: usize = (&instr.imm / 4) as usize;
     
     match &mut insert_position.v_value {
         Type::Int(inmemory_data) => {
-            let requested_position = (re_2_stored_address - insert_position.v_address) / 4;
+            let requested_position = (reg_2_stored_address - insert_position.v_address) / 4;
             inmemory_data[index + requested_position as usize] = instr.reg_1.value.parse().expect(("Not a .word in reg ".to_string() + instr.reg_1.name.as_str()).as_str());
         },
         _ => { panic!("Not a .word!"); }

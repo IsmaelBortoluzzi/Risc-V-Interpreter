@@ -51,9 +51,10 @@ fn main() {
     run(&mut data, &mut registers, &mut lines, &mut stack);
 
     println!("\nStack:");
-    for x in stack {
+    for x in stack.iter() {
         println!("{}", x);
     }
+
     println!("\n.DATA");
     for x in data.iter() {
         println!("{}: {:?}", *(x.0), *(x.1));
@@ -63,8 +64,6 @@ fn main() {
     for x in registers.iter() {
         println!("{}: {:?}", *(x.0), *(x.1));
     }
-
-
 
     println!("\nLINES:");
     for x in lines.iter() {

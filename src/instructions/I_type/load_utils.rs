@@ -1,13 +1,45 @@
 use {
     std::collections::HashMap,
     crate::{
+        instructions::instructions::InstructionName,
         dot_data::data::{
             DotDataVariable, 
             Type
         }, 
+        stack::{
+            stack::Stack,
+            pub_utils::*,
+        },
         registers::registers::Register,
-    }
+    },
+    super::I_type::IType,
 };
+    
+
+fn exec_lw_stack(stack: &mut Stack, registers: &mut HashMap<String, Register>, instr: IType) {
+    let start_address = 1000000;
+    let end_address = 967232;
+    let mut address = instr.reg_2.value.parse::<usize>().expect("sp value should be a number!");
+
+    if (address - end_address) % 4 != 0 {
+        panic!("Memory unaligned!");
+    }
+    if address < (end_address + 4) || address > start_address {  
+        panic!("Stack overflow!");  
+    }
+    
+    address = (address - end_address - 1/*1 less to be correct*/) / 4 + instr.imm as usize;
+    
+    let reg_1: &mut Register = registers.get_mut(instr.reg_1.name.as_str()).unwrap();
+    
+    match stack[address].parse::<i32>() {
+        Ok(_) => {},
+        Err(_) => panic!("There is not a .word in this address!")
+    }
+
+    reg_1.value = String::from(stack[address].as_str());
+    stack[address] = String::from("");
+}
 
 
 pub fn get_read_reg_value(key: &str, registers: &mut HashMap<String, Register>) -> i64 {
@@ -56,6 +88,7 @@ pub fn exec_lw(
     instruction: &Vec<&str>,  // ["lw a0", "0(t0)"]
     registers: &mut HashMap<String, Register>,
     data: &mut HashMap<String, DotDataVariable>,
+    stack: &mut Stack
 ) {
     let destination_reg: String  = instruction[0]
         .split(" ")
@@ -68,7 +101,7 @@ pub fn exec_lw(
         .split("(")
         .collect::<Vec<&str>>()[0]
         .parse::<i64>()
-        .unwrap();  // ["0", "t0)"] -> 0
+        .expect("Not an integer!");  // ["0", "t0)"] -> 0
     
     let mut source_reg: String = instruction[1]
         .trim()
@@ -78,8 +111,18 @@ pub fn exec_lw(
     
     source_reg.pop();  // "t0"
 
+    if is_stack_operation(&source_reg.as_str()) { 
+        exec_lw_stack(stack, registers, IType {
+            name: InstructionName::Lw,
+            reg_1: registers.get(destination_reg.as_str()).unwrap().clone(),
+            reg_2: registers.get(source_reg.as_str()).unwrap().clone(),
+            imm: indexes_after_address as i32,
+        }); 
+        return;
+    }
+
     let reg_2_stored_address: i64 = get_read_reg_value(source_reg.as_str(), registers);
-    let reg_1: &mut Register = registers.get_mut(destination_reg.as_str()).unwrap();
+    let reg_1: &mut Register = registers.get_mut(destination_reg.as_str()).expect("Unknown Register!");
     
     let mut ordered_dotdata = data
         .iter()

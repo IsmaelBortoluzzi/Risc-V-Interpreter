@@ -18,8 +18,8 @@
 
 - [Quick start](#quick-start)
 - [Exemple Program](#exemple-program)
-- [Ecalls Supported](#ecalls-supported)
 - [Instructions Supported](#instructions-supported)
+- [Ecalls Supported](#ecalls-supported)
 - [Not Yet Supported Features](#not-yet-supported-features)
 - [What's included](#whats-included)
 - [Bugs and feature requests](#bugs-and-feature-requests)
@@ -40,7 +40,7 @@ The program will take a file path as an arg in the command line
 
 ## Exemple Program
     .data
-    DIVIDENDO: .word -118
+    DIVIDEND: .word -118
     SPACE:.asciz " "
     DIVISOR: .word 7
     ARRAY: .word -118, 8, 7, 99
@@ -51,7 +51,7 @@ The program will take a file path as an arg in the command line
     .main:
       # euclidean division algorithm
 
-      la a0, DIVIDENDO
+      la a0, DIVIDEND
       la a1, DIVISOR
 
       lw a0, 0(a0)
@@ -140,7 +140,6 @@ The program will take a file path as an arg in the command line
     Andi,
     Lw,
     La,
-    Lb,
 
     // B-type
     Blt,
@@ -159,14 +158,13 @@ The program will take a file path as an arg in the command line
     10 => finish program
 
 ## Not Yet Supported Features
-- The stack
 - Most of .data, actually only two are supported
   - .word
   - .asciz
 
 ## What's included
 
-Basic assembly is covered. Stack is still in development
+Basic RI32I and RI32M is covered. Stack is also supported but only using sp reg to access it
 
 ```text
 interpreter/
@@ -208,6 +206,10 @@ interpreter/
     ├── registers/
     │   ├── mod.rs
     │   └── registers.rs
+    ├── stack/
+    │   ├── mod.rs
+    │   ├── pub_utils.rs
+    │   └── stack.rs
     ├── run/
     │    ├── mod.rs
     │    └── run.rs

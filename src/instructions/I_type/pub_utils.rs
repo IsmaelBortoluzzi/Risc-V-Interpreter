@@ -1,6 +1,12 @@
 use std::collections::HashMap;
 
-use crate::{instructions::instructions::{InstructionName, get_read_reg}, registers::registers::Register};
+use crate::{
+    instructions::instructions::{
+        InstructionName, 
+        get_read_reg
+    }, 
+    registers::registers::Register
+};
 
 use super::I_type::IType;
 
