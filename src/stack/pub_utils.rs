@@ -1,16 +1,10 @@
 use {
-    super::{
-        stack::Stack,
-        utils::*,
-    },
     crate::{
         instructions::{
-            instructions::InstructionName,
             S_type::S_type::SType,
         },
         registers::registers::Register, 
     },
-    std::collections::HashMap,
 };
 
 

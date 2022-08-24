@@ -42,13 +42,18 @@ fn main() {
     // store data defined in .data
     let mut data: HashMap<String, DotDataVariable> = store_dot_data(&mut lines);
 
-    // stack
-    let mut stack: Stack = Vec::with_capacity(1024*4);  // 10kb of stack space
-    unsafe { stack.set_len(1024*4); }
+    // stack  
+    let size = 1024*8;  // stack space
+    let mut stack: Stack = Vec::with_capacity(size);
+    unsafe { stack.set_len(size); }
 
     // execute program line by line
     run(&mut data, &mut registers, &mut lines, &mut stack);
 
+    println!("\nStack:");
+    for x in stack {
+        println!("{}", x);
+    }
     println!("\n.DATA");
     for x in data.iter() {
         println!("{}: {:?}", *(x.0), *(x.1));
@@ -59,10 +64,7 @@ fn main() {
         println!("{}: {:?}", *(x.0), *(x.1));
     }
 
-    println!("\nStack:");
-    for x in stack.iter() {
-        println!("{}", *(x));
-    }
+
 
     println!("\nLINES:");
     for x in lines.iter() {

@@ -15,23 +15,20 @@ use {
 
 
 fn exec_sw_stack(stack: &mut Stack, instr: &mut SType) { 
+    let start_address = 1000000;
+    let end_address = 967232;
     let mut address = instr.reg_2.value.parse::<usize>().expect("sp value should be a number!");
 
-    if (address - 983616) % 4 != 0 {
+    if (address - end_address) % 4 != 0 {
         panic!("Memory unaligned!");
     }
-    
-    if address < 983616 { // 983616 is the min address (16kb of stack is allocated)
-        panic!("Stack overflow!");
-    }
-    else if address > 1000000 {
-        panic!("Address does not belong to stack!");
+    if address < (end_address + 4) || address > start_address {  
+        panic!("Stack overflow!");  
     }
     
-    address = (address - 983616 - 1/*1 less than len*/) / 4 + instr.imm as usize;
-    
-    stack[address] = String::from(instr.reg_1.value.as_str());
+    address = (address - end_address - 1/*1 less to be correct*/) / 4 + instr.imm as usize;
 
+    stack[address] = String::from(instr.reg_1.value.as_str());
 }
 
 
