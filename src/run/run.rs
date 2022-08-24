@@ -29,7 +29,7 @@ pub fn get_all_labels(lines: &mut Vec<String>) -> HashMap<String, usize> {
     while line < lines.len() {
         let check_if_label: Vec<&str> = lines[line].split(":").collect();
         if check_if_label.len() > 1 {
-            labels.insert(check_if_label[0].to_string(), line + 1);
+            labels.insert(check_if_label[0].trim().to_string(), line + 1);
         }
         line += 1; 
     }
@@ -68,6 +68,7 @@ pub fn run(
             continue;
         }
 
+        // get the instruction name and find it's type
         let instruction: Vec<&str> = lines[line].split(",").collect();
         let instr: &str = instruction[0].split(" ").collect::<Vec<&str>>()[0].trim();
         let instr_type: InstructionType = InstructionType::decode_type(instr);
@@ -79,6 +80,7 @@ pub fn run(
             InstructionType::J => { exec_j_type(&instruction, registers, &mut labels, &mut line); },
             InstructionType::R => { exec_r_type(&instruction, registers); },
             InstructionType::S => { exec_s_type(&instruction, registers, data, stack); },
+            InstructionType::PseudoInstruction => { exec_pseudo_instruction(&instruction, registers, data, &mut labels, &mut line); }, 
             InstructionType::Ecall => { exec_ecall(registers, &mut line) }
         }
         

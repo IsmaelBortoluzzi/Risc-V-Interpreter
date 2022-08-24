@@ -14,9 +14,9 @@ pub fn _exec_i_type(instruction: &Vec<&str>, registers: &mut HashMap<String, Reg
     let instr_reg_1: Vec<&str> = instruction[0].split(" ").collect();
     let instr: InstructionName = InstructionName::str_to_instr_name(instr_reg_1[0]);
     
-    let imm: i32 = instruction[2].trim().parse().unwrap();
+    let imm: i32 = instruction[2].trim().parse().expect("Last I Type arg should be an Integer!");
     let reg_2: Register = get_read_reg(instruction[1].trim(),registers);
-    let reg_1: &mut Register = registers.get_mut(instr_reg_1[1].trim()).expect("Unknown Register");
+    let reg_1: &mut Register = registers.get_mut(instr_reg_1[1].trim()).expect("Unknown Register!");
 
     let mut r_type_instr: IType = IType {
         name: instr,

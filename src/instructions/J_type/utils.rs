@@ -8,7 +8,7 @@ pub fn exec_jalr(instr: &mut JType) -> i64 {
     }
     
     instr.reg_2.value.parse::<i64>().expect("Not an integer!") + instr.offset
-    
+  
 }
 
 

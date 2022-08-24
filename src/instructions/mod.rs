@@ -1,7 +1,8 @@
 pub mod instructions;
-pub mod R_type;
-pub mod I_type;
-pub mod B_type;
-pub mod J_type;
-pub mod S_type;
-pub mod ecall;
+mod R_type;
+mod I_type;
+mod B_type;
+mod J_type;
+mod S_type;
+mod ecall;
+mod pseudo;

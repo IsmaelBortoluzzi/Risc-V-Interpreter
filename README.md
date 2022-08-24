@@ -40,11 +40,12 @@ The program will take a file path as an arg in the command line
 
 ## Exemple Program
     .data
-    DIVIDEND: .word -118
+    DIVIDEND: .word 20
     SPACE:.asciz " "
     DIVISOR: .word 7
     ARRAY: .word -118, 8, 7, 99
     RESULT: .word -1
+	REMAINDER: .word -1
 
     .text
 
@@ -56,69 +57,65 @@ The program will take a file path as an arg in the command line
 
       lw a0, 0(a0)
       lw a1, 0(a1)
-      
+
       jal floorDiv
-      
-      la t0, RESULT
-      sw a0, 0(t0)
-      
-      addi a7, zero, 10
+
+	  la t0, RESULT
+	  sw a0, 0(t0)
+
+	  la t0, REMAINDER
+	  sw a1, 0(t0)
+
+      li a7, 10
       ecall
 
 
     floorDiv:
-      blt a0, zero, normUp
-      addi t5, zero, 0
+        blt a0, zero, normUp
+        li t5, 0
 
     afterNormUp:
-      blt a1, zero, normBottom
-      addi t6, zero, 0
+        blt a1, zero, normBottom
+        li t6, 0
 
     afterNormBottom:
-      addi t0, zero, 0
-        
-      j while
+        li t0, 0
+
+        j while
 
     normUp:
-      xori a0, a0, -1
-      addi a0, a0, 1
+        sub a0, zero, a0
+        li t5, 1
 
-      addi t5, zero, 1
-      
-      j afterNormUp
-
+        j afterNormUp
 
     normBottom:
-      xori a1, a1, -1
-      addi a1, a1, 1
-      
-      addi t6, zero, 1
-      
-      j afterNormBottom
+        sub a1, zero, a1
+        li t6, 1
+
+        j afterNormBottom
 
     while:
-      blt a0, a1, endWhile
-      sub a0, a0, a1
-      
-      addi t0, t0, 1
-      
-      j while
+        blt a0, a1, endWhile
+        sub a0, a0, a1
+
+        addi t0, t0, 1
+
+        j while
 
     endWhile:
-      xor t1, t5, t6
-      bgt t1, zero, changeSign
-      j endFloorDiv
-      
+        xor t1, t5, t6
+        bgt t1, zero, changeSign
+        j endFloorDiv
+
     changeSign:
-      xori t0, t0, -1
-      addi t0, t0, 1
+        sub t0, zero, t0
 
     endFloorDiv:
-      addi a1, a0, 0
-      addi a0, t0, 0
+        mv a1, a0
+        mv a0, t0
 
-      jalr zero, ra, 0
-
+        ret
 
 ## Instructions Supported
     // R-type

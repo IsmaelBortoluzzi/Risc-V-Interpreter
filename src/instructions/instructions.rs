@@ -13,6 +13,7 @@ use {
     super::J_type,
     super::S_type,
     super::ecall,
+    super::pseudo,
 };
 
 
@@ -24,7 +25,12 @@ pub enum InstructionType {
     J,
     R,
     S,
+
+    // ecall
     Ecall,
+
+    // Pseudo Instructions
+    PseudoInstruction
 }
 
 impl InstructionType {
@@ -38,6 +44,10 @@ impl InstructionType {
             "j" | "jal" | "jalr" => { InstructionType::J },
             "sw" | "sb" => { InstructionType::S },
             "ecall" => { InstructionType::Ecall },
+
+            // Pseudo Instructions
+            "ret" | "li" | "mv" => { InstructionType::PseudoInstruction },
+            
             _ => { panic!("Unsupported Instruction!") },
         }
 
@@ -195,115 +205,12 @@ pub fn exec_ecall(registers: &mut HashMap<String, Register>, current_line: &mut 
 }
 
 
-// .data
-// DIVIDENDO: .word 0
-// SPACE:.asciz " "
-// DIVISOR: .word 7
-// ARRAY: .word -118, 8, 7, 99
-// RESULT: .word -1
-
-// .text
-
-// .main:
-// 	# euclidean division algorithm
-	
-// 	la a0, DIVIDENDO
-// 	la a1, DIVISOR
-
-// 	lw a0, 0(a0)
-// 	lw a1, 0(a1)
-
-
-
-// 	la a0, LIST
-// 	la a1, SIZE
-// 	lw a1, (a1)
-// 	li a2, 0
-	
-// 	jal recFunc
-	
-// 	li a7, 10
-// 	ecall
-	
-
-
-
-		
-
-
-
-
-// 	addi t0, zero, 8192
-// loop:
-// 	beq a0, t0, afterloop
-// 	sw a0, 0(sp)
-// 	addi sp, sp, -4
-// 	addi a0, a0, 1
-// 	j loop
-// afterloop:
-// 	addi a7, zero, 10
-//  	ecall
-
-
-
-// 	jal floorDiv
-	
-// 	la t0, RESULT
-// 	sw a0, 0(t0)
-	
-//  	addi a7, zero, 10
-//  	ecall
-
-
-// floorDiv:
-// 	blt a0, zero, normUp
-// 	addi t5, zero, 0
-
-// afterNormUp:
-// 	blt a1, zero, normBottom
-// 	addi t6, zero, 0
-
-// afterNormBottom:
-// 	addi t0, zero, 0
-		
-// 	j while
-
-// normUp:
-// 	xori a0, a0, -1
-// 	addi a0, a0, 1
-
-// 	addi t5, zero, 1
-	
-// 	j afterNormUp
-
-
-// normBottom:
-// 	xori a1, a1, -1
-// 	addi a1, a1, 1
-	
-// 	addi t6, zero, 1
-	
-// 	j afterNormBottom
-
-// while:
-// 	blt a0, a1, endWhile
-// 	sub a0, a0, a1
-	
-// 	addi t0, t0, 1
-	
-// 	j while
-
-// endWhile:
-// 	xor t1, t5, t6
-// 	bgt t1, zero, changeSign
-// 	j endFloorDiv
-	
-// changeSign:
-// 	xori t0, t0, -1
-// 	addi t0, t0, 1
-
-// endFloorDiv:
-// 	addi a1, a0, 0
-// 	addi a0, t0, 0
-
-// 	jalr zero, ra, 0
+pub fn exec_pseudo_instruction(
+    instruction: &Vec<&str>,
+    registers: &mut HashMap<String, Register>, 
+    data: &mut HashMap<String, DotDataVariable>,
+    labels: &mut HashMap<String, usize>,
+    current_line: &mut usize,
+) {
+    pseudo::pseudo::_exec_pseudo_instruction(instruction, registers, data, labels, current_line);
+}

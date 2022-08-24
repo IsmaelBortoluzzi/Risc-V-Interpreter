@@ -15,8 +15,9 @@ fn lines_from_file(filename: impl AsRef<Path>) -> io::Result<Vec<String>> {
 
 
 pub fn file_reader() -> Vec<String> {
-    let args: Vec<String> = env::args().collect();
-    let filename: String = String::from(args[1].as_str());
+    // let args: Vec<String> = env::args().collect();
+    // let filename: String = String::from(args[1].as_str());
+    let filename = "/home/ballke/VScodeProjects/rust/Risc-V-Interpreter/dummyfile.txt".to_string();
     let lines: Vec<String> = lines_from_file(filename).expect("Could not load lines");
     
     return lines;
