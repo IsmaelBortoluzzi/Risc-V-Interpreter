@@ -150,6 +150,11 @@ The program will take a file path as an arg in the command line
     J,
     Jal,
     Jalr,
+    
+    // Pseudo Instructions
+    Ret,
+    Li,
+    Mv,
 
 ## Ecalls Supported
     10 => finish program
